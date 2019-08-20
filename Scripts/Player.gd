@@ -1,19 +1,21 @@
-"""
-TODO:
-	Split functions up a bit more
-	Make this function better in general
-"""
-
 extends KinematicBody2D
 
+# Initial Declarations
 export (int) var speed = 200
 var velocity = Vector2()
 onready var anim = $AnimationPlayer
 onready var sprite = $Sprite
 
-func get_input():
+# Main Physics Loop
+func _physics_process(delta):
+	_get_input()
+	_sprite_handler()
+	velocity = move_and_slide(velocity)
+
+# Helper functions
+func _get_input():
 	velocity = Vector2()
-	var sprinting = is_sprinting()
+	var sprinting = _is_sprinting()
 	
 	if Input.is_action_pressed("up"):
 		velocity.y -= 1
@@ -21,25 +23,28 @@ func get_input():
 		velocity.y += 1
 	if Input.is_action_pressed("left"):
 		velocity.x -= 1
-		sprite.flip_h = true
 	if Input.is_action_pressed("right"):
 		velocity.x += 1
-		sprite.flip_h = false
 	
 	if sprinting:
 		velocity = velocity.normalized() * speed * 2
-		anim.play("run")
 	else:
 		velocity = velocity.normalized() * speed
-		anim.play("walk")
-	
-	if velocity == Vector2.ZERO:
-		anim.stop(false)
 
-
-func _physics_process(delta):
-	get_input()
-	velocity = move_and_slide(velocity)
-	
-func is_sprinting():
+func _is_sprinting():
 	return Input.is_action_pressed("sprint")
+
+func _sprite_handler():
+	var sprinting = _is_sprinting()
+	var moving = velocity != Vector2.ZERO
+	if sprinting && moving:
+		anim.play("run")
+	elif !sprinting && moving:
+		anim.play("walk")
+	else:
+		anim.stop(false)
+		
+	if Input.is_action_pressed("right"):
+		sprite.flip_h = false
+	if Input.is_action_pressed("left"):
+		sprite.flip_h = true
