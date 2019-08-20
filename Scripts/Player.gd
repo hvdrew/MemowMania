@@ -8,7 +8,8 @@ extends KinematicBody2D
 
 export (int) var speed = 200
 var velocity = Vector2()
-onready var anim = get_node("AnimationPlayer")
+onready var anim = $AnimationPlayer
+onready var sprite = $Sprite
 
 func get_input():
 	velocity = Vector2()
@@ -20,8 +21,10 @@ func get_input():
 		velocity.y += 1
 	if Input.is_action_pressed("left"):
 		velocity.x -= 1
+		sprite.flip_h = true
 	if Input.is_action_pressed("right"):
 		velocity.x += 1
+		sprite.flip_h = false
 	
 	if sprinting:
 		velocity = velocity.normalized() * speed * 2
