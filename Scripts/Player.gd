@@ -2,6 +2,8 @@ extends KinematicBody2D
 
 # Initial Declarations
 export (int) var speed = 200
+const GRAVITY = 200.0
+
 var velocity = Vector2()
 var sprinting = false
 onready var anim = $AnimationPlayer
@@ -15,8 +17,8 @@ func _physics_process(delta):
 	
 	# TODO: Figure out the following:
 	var collision = move_and_collide(velocity * delta)
-	if collision:
-		self.queue_free() # Doesn't work, Winston disappears instead of the coin...
+	#if collision:
+		#self.queue_free() # Doesn't work, Winston disappears instead of the coin...
 
 # Helper functions
 func _get_input():
