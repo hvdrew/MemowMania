@@ -57,3 +57,8 @@ shape = SubResource( 1 )
 autoplay = "walk"
 anims/run = SubResource( 2 )
 anims/walk = SubResource( 3 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+limit_top = -1
+limit_bottom = 1
